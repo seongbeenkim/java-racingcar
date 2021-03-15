@@ -41,14 +41,6 @@ public class CarService {
         return carRepository.findByName(name);
     }
 
-    public void resetCarMovementRange(String Name) {
-        carRepository.resetMovementRangeByName(Name);
-    }
-
-    public void resetCarsMovementRange() {
-        carRepository.resetAllMovementRange();
-    }
-
     public void moveCars() {
         carRepository.updateCarsMovementRange();
     }

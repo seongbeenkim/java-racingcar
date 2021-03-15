@@ -1,6 +1,8 @@
 package racingcar.repository;
 
 import racingcar.domain.Car;
+import racingcar.domain.Name;
+import racingcar.domain.Position;
 import racingcar.utils.RandomNumberGenerator;
 
 import java.util.*;
@@ -21,20 +23,23 @@ public class CarRepository {
 
     public Queue<Integer> findAllMovementRange() {
         return cars.stream()
-                .map(Car::getMovementRange)
+                .map(Car::getPosition)
+                .map(Position::getPosition)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public Queue<String> findAllNames() {
         return cars.stream()
                 .map(Car::getName)
+                .map(Name::getName)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public Queue<String> findWinnersByMaxMovementRange(int maxMovementRange) {
         return cars.stream()
-                .filter(car -> car.isMaxMovementRange(maxMovementRange))
+                .filter(car -> car.isWinner(maxMovementRange))
                 .map(Car::getName)
+                .map(Name::getName)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -47,21 +52,10 @@ public class CarRepository {
 
     public int findMaxMovementRange() {
         return cars.stream()
-                .map(Car::getMovementRange)
+                .map(Car::getPosition)
+                .map(Position::getPosition)
                 .max(Integer::compareTo)
                 .orElse(MIN_MOVEMENT_RANGE);
-    }
-
-    public void resetMovementRangeByName(String name) {
-        Car foundCar = cars.stream()
-                .filter(car -> name.equals(car.getName()))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("해당 이름을 가진 자동차가 없습니다."));
-        foundCar.initializeMovementRange();
-    }
-
-    public void resetAllMovementRange() {
-        cars.forEach(Car::initializeMovementRange);
     }
 
     public void updateCarsMovementRange() {
